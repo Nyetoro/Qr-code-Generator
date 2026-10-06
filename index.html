@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <title>QRify - QR Code Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Local QR library -->
+    <script src="lib/qrcode.min.js"></script>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-box"></div>
+            QRify
+        </div>
+
+        <div class="navbar-actions">
+            <select id="languageSelect" class="lang-select" aria-label="Language">
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="es">Español</option>
+            </select>
+
+            <button
+                type="button"
+                class="theme-button"
+                id="themeButton"
+                aria-label="Toggle dark mode"
+            >
+                🌙
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="badge" data-i18n="badge">FREE QR CODE GENERATOR</div>
+
+        <h1>
+            <span data-i18n="heroTitle1">Create QR Codes</span>
+            <span data-i18n="heroTitle2" class="accent">Instantly.</span>
+        </h1>
+
+        <p data-i18n="heroSubtitle">
+            Generate professional QR codes for websites, text, email,
+            phone numbers and Wi-Fi. Fast, simple and free.
+        </p>
+    </header>
+
+    <!-- MAIN -->
+    <main class="container">
+
+        <!-- MODE TABS -->
+        <div class="mode-tabs" role="tablist">
+            <button
+                type="button"
+                class="mode-tab active"
+                data-mode="generate"
+                role="tab"
+                data-i18n="tabGenerate"
+            >
+                Generator
+            </button>
+
+            <button
+                type="button"
+                class="mode-tab"
+                data-mode="scan"
+                role="tab"
+                data-i18n="tabScan"
+            >
+                Scanner
+            </button>
+
+            <button
+                type="button"
+                class="mode-tab"
+                data-mode="batch"
+                role="tab"
+                data-i18n="tabBatch"
+            >
+                Bulk
+            </button>
+        </div>
+
+        <!-- ================= GENERATOR MODE ================= -->
+        <section class="generator mode-panel active" id="modeGenerate">
+
+            <!-- LEFT PANEL -->
+            <div class="panel">
+
+                <h2 class="panel-title">Create your QR Code</h2>
+
+                <div class="types" role="group" aria-label="QR code content type">
+                    <button type="button" class="type-button active" data-type="url">
+                        URL
+                    </button>
+                    <button type="button" class="type-button" data-type="text">
+                        Text
+                    </button>
+
+                    <button type="button" class="type-button" data-type="email">
+                        Email
+                    </button>
+
+                    <button type="button" class="type-button" data-type="phone">
+                        Phone
+                    </button>
+
+                    <button type="button" class="type-button" data-type="wifi">
+                        Wi-Fi
+                    </button>
+
+                    <button type="button" class="type-button" data-type="vcard">
+                        Contact
+                    </button>
+
+                    <button type="button" class="type-button" data-type="event">
+                        Event
+                    </button>
+
+                    <button type="button" class="type-button" data-type="sms">
+                        SMS
+                    </button>
+
+                    <button type="button" class="type-button" data-type="geo">
+                        Location
+                    </button>
+                </div>
+
+                <form id="qrForm">
+
+                    <div id="dynamicFields"></div>
+
+                    <!-- COLOR PRESETS -->
+                    <div class="field">
+                        <label data-i18n="colorPresets">Color Presets</label>
+
+                        <div class="preset-row" id="presetRow">
+                            <button type="button" class="preset"
+                                data-dark="#000000" data-light="#ffffff"
+                                style="background:#000;color:#fff" title="Classic">Aa</button>
+                            <button type="button" class="preset"
+                                data-dark="#0f766e" data-light="#ecfeff"
+                                style="background:#0f766e;color:#ecfeff" title="Ocean">Aa</button>
+                            <button type="button" class="preset"
+                                data-dark="#b91c1c" data-light="#fff7ed"
+                                style="background:#b91c1c;color:#fff7ed" title="Sunset">Aa</button>
+                            <button type="button" class="preset"
+                                data-dark="#166534" data-light="#f0fdf4"
+                                style="background:#166534;color:#f0fdf4" title="Forest">Aa</button>
+                            <button type="button" class="preset"
+                                data-dark="#6d28d9" data-light="#faf5ff"
+                                style="background:#6d28d9;color:#faf5ff" title="Grape">Aa</button>
+                            <button type="button" class="preset"
+                                data-dark="#1f2937" data-light="#f3f4f6"
+                                style="background:#1f2937;color:#f3f4f6" title="Mono">Aa</button>
+                        </div>
+                    </div>
+
+                    <div class="options">
+
+                        <div class="field">
+                            <label for="qrColor" data-i18n="qrColor">QR Color</label>
+                            <input
+                                type="color"
+                                id="qrColor"
+                                value="#000000"
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label for="bgColor" data-i18n="bgColor">Background</label>
+                            <input
+                                type="color"
+                                id="bgColor"
+                                value="#ffffff"
+                            >
+                        </div>
+
+                    </div>
+
+                    <!-- CONTRAST WARNING -->
+                    <div class="contrast-warning hidden" id="contrastWarning">
+                        <span>⚠️</span>
+                        <span data-i18n="contrastWarning">
+                            Low contrast — this QR code may not scan. Try a darker
+                            foreground or lighter background.
+                        </span>
+                    </div>
+
+                    <div class="field">
+                        <label for="qrSize" data-i18n="qrSize">QR Size</label>
+                        <div class="field">
+    <label for="qrStyle" data-i18n="qrStyle">QR Style</label>
+    <select id="qrStyle">
+        <option value="classic" selected>Classic — Square</option>
+        <option value="rounded">Rounded</option>
+        <option value="dots">Dots</option>
+    </select>
+</div>
+
+                        <select id="qrSize">
+                            <option value="180">Small - 180px</option>
+                            <option value="250" selected>Medium - 250px</option>
+                            <option value="350">Large - 350px</option>
+                            <option value="500">Extra Large - 500px</option>
+                        </select>
+                    </div>
+                    <div class="field">
+    <label for="errorCorrection" data-i18n="errorCorrection">
+        Error Correction
+    </label>
+
+    <select id="errorCorrection">
+        <option value="L">
+            Low — 7%
+        </option>
+
+        <option value="M" selected>
+            Medium — 15%
+        </option>
+
+        <option value="Q">
+            High — 25%
+        </option>
+
+        <option value="H">
+            Very High — 30%
+        </option>
+    </select>
+</div>
+<div class="field">
+    <label for="captionInput" data-i18n="caption">Caption (optional)</label>
+    <input
+        type="text"
+        id="captionInput"
+        placeholder="Scan me"
+        maxlength="40"
+    >
+</div>
+<div class="field">
+    <label for="logoUpload" data-i18n="qrLogo">QR Logo</label>
+    <input type="file" id="logoUpload" accept="image/*">
+    <small>Optional — upload a logo to place in the center of your QR code.</small>
+</div>
+<div class="field">
+    <label for="logoSize">Logo Size</label>
+    <input
+        type="range"
+        id="logoSize"
+        min="10"
+        max="35"
+        value="22"
+    >
+    <div class="range-value">
+        <span id="logoSizeValue">22%</span>
+    </div>
+</div>
+
+<div class="field">
+    <label for="logoRadius">Logo Corner Radius</label>
+    <input
+        type="range"
+        id="logoRadius"
+        min="0"
+        max="50"
+        value="12"
+    >
+    <div class="range-value">
+        <span id="logoRadiusValue">12px</span>
+    </div>
+</div>
+
+<div class="field">
+    <label for="logoBackground">Logo Background</label>
+    <select id="logoBackground">
+        <option value="white" selected>White</option>
+        <option value="transparent">Transparent</option>
+    </select>
+</div>
+
+<button
+    type="button"
+    class="btn btn-secondary"
+    id="removeLogoButton"
+>
+    Remove Logo
+</button>
+
+                    <div class="button-row">
+
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            id="generateButton"
+                        >
+                            Generate QR
+                        </button>
+
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            id="resetButton"
+                        >
+                            Reset
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <!-- RIGHT PANEL -->
+            <div class="panel preview-panel">
+
+                <h2 class="panel-title">Preview</h2>
+
+                <div class="qr-wrapper">
+
+                    <div id="emptyState" class="empty-state">
+                        <div class="empty-icon">▦</div>
+                        <strong>Your QR code will appear here</strong>
+                        <br>
+                        Enter your information and click Generate QR.
+                    </div>
+
+                    <div id="qrCode" style="display: none;"></div>
+
+                </div>
+
+                <div class="preview-actions">
+
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="downloadButton"
+                        disabled
+                        data-i18n="downloadPng"
+                    >
+                        Download PNG
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="downloadSvgButton"
+                        disabled
+                        data-i18n="downloadSvg"
+                    >
+                        Download SVG
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="downloadPdfButton"
+                        disabled
+                        data-i18n="downloadPdf"
+                    >
+                        Download PDF
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="shareButton"
+                        disabled
+                        data-i18n="share"
+                    >
+                        Share QR Code
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="printButton"
+                        disabled
+                        data-i18n="print"
+                    >
+                        Print
+                    </button>
+
+                </div>
+
+                <!-- RECENT QR CODES -->
+                <div class="history-section">
+
+                    <div class="history-header">
+                        <h3 class="history-title" data-i18n="recent">
+                            📜 Recent QR Codes
+                        </h3>
+
+                        <button
+                            type="button"
+                            class="history-clear"
+                            id="clearHistoryButton"
+                            data-i18n="clearAll"
+                        >
+                            Clear All
+                        </button>
+                    </div>
+
+                    <div class="mini-stats" id="miniStats"></div>
+
+                    <div id="historyList" class="history-list">
+                        <p class="history-empty" id="historyEmpty">
+                            Your recent QR codes will appear here.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= SCANNER MODE ================= -->
+        <section class="mode-panel" id="modeScan">
+            <div class="panel">
+
+                <h2 class="panel-title" data-i18n="scanTitle">Scan / Decode a QR Code</h2>
+
+                <div class="field">
+                    <label for="scanFile" data-i18n="scanUpload">
+                        Upload a QR image
+                    </label>
+                    <input type="file" id="scanFile" accept="image/*">
+                </div>
+
+                <div class="field">
+                    <button type="button" class="btn btn-secondary" id="scanCameraButton">
+                        📷 <span data-i18n="scanCamera">Use Camera</span>
+                    </button>
+
+                    <button type="button" class="btn btn-secondary hidden" id="scanStopButton">
+                        <span data-i18n="scanStop">Stop Camera</span>
+                    </button>
+                </div>
+
+                <div class="scan-stage">
+                    <video id="scanVideo" playsinline class="hidden"></video>
+                    <canvas id="scanCanvas" class="hidden"></canvas>
+                </div>
+
+                <div class="scan-result hidden" id="scanResult">
+                    <h3 data-i18n="scanResultTitle">Decoded Result</h3>
+                    <p class="scan-type" id="scanType"></p>
+                    <textarea id="scanText" class="scan-text" readonly></textarea>
+
+                    <div class="button-row">
+                        <button type="button" class="btn btn-primary" id="scanUseButton">
+                            <span data-i18n="scanUse">Use this content</span>
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="scanCopyButton">
+                            <span data-i18n="scanCopy">Copy</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= BATCH MODE ================= -->
+        <section class="mode-panel" id="modeBatch">
+            <div class="panel">
+
+                <h2 class="panel-title" data-i18n="batchTitle">Bulk QR Generation</h2>
+
+                <div class="field">
+                    <label for="batchInput" data-i18n="batchInput">
+                        Enter one URL or text per line
+                    </label>
+                    <textarea
+                        id="batchInput"
+                        rows="8"
+                        placeholder="https://example.com&#10;https://github.com&#10;https://openai.com"
+                    ></textarea>
+                </div>
+
+                <div class="button-row">
+                    <button type="button" class="btn btn-primary" id="batchGenerateButton">
+                        <span data-i18n="batchGenerate">Generate All</span>
+                    </button>
+
+                    <button type="button" class="btn btn-secondary" id="batchZipButton">
+                        <span data-i18n="batchDownloadZip">Download ZIP</span>
+                    </button>
+
+                    <button type="button" class="btn btn-secondary" id="batchPrintButton">
+                        <span data-i18n="batchPrint">Print Sheet</span>
+                    </button>
+                </div>
+
+                <p class="batch-count" id="batchCount"></p>
+
+                <div id="batchGrid" class="batch-grid"></div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© 2026 QRify. Simple. Fast. Professional.</p>
+    </footer>
+
+    <div
+        id="toast"
+        class="toast"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+    ></div>
+
+    <script src="lib/jsQR.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>

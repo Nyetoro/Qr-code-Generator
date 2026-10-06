@@ -1,0 +1,21 @@
+# Backup files
+*.bak
+
+# Large source image (only the optimised favicons are published)
+favicon-original.png
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor folders
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary files
+*.tmp
