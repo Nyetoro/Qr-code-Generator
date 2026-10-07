@@ -837,6 +837,30 @@ footer p {
     margin: 0;
 }
 
+.credit {
+    margin-top: 6px !important;
+
+    font-size: 12.5px;
+}
+
+.credit a {
+    color: var(--primary);
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    border-bottom: 1px solid transparent;
+
+    transition:
+        border-color var(--transition),
+        color var(--transition);
+}
+
+.credit a:hover {
+    border-bottom-color: var(--primary);
+}
+
 
 /* ==========================================
    TOAST
